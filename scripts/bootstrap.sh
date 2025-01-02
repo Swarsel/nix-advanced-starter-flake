@@ -67,7 +67,7 @@ sudo mkdir -p /mnt/home/"$target_user"/
 sudo cp -r "$dotfile_dir" /mnt/home/"$target_user"/
 
 green "Generating hardware configuration"
-sudo nixos-generate-config --root /mnt --no-filesystems --dir /home/"$target_user"/.dotfiles/hosts/"$target_config"/
+sudo nixos-generate-config --root /mnt --no-filesystems --dir ./"$dotfile_dir"/hosts/"$target_config"/
 
 green "Installing flake $target_config"
 sudo nixos-install --flake ./"$dotfile_dir"#"$target_config"
