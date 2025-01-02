@@ -1,0 +1,3 @@
+[submodule "default"]
+	path = default
+	url = git@github.com:Swarsel/nix-advanced-starter-flake-config.git
