@@ -60,14 +60,15 @@ green "nix-advanced-starter-flake installer"
 green "Cloning dotfile repo"
 git clone "$git_repo" "$dotfile_dir"
 
+green "Generating hardware configuration"
+sudo nixos-generate-config --root /mnt --no-filesystems --dir "$current_dir"/"$dotfile_dir"/hosts/"$target_config"/
+
 green "Setting up disk"
 sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount --flake "$current_dir"/"$dotfile_dir"#"$target_config" --yes-wipe-all-disks
 
+green "Copying configuration to root disk"
 sudo mkdir -p /mnt/home/"$target_user"/
 sudo cp -r "$current_dir"/"$dotfile_dir" /mnt/home/"$target_user"/
-
-green "Generating hardware configuration"
-sudo nixos-generate-config --root /mnt --no-filesystems --dir "$current_dir"/"$dotfile_dir"/hosts/"$target_config"/
 
 green "Installing flake $target_config"
 sudo nixos-install --flake ./"$dotfile_dir"#"$target_config"
