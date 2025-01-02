@@ -8,7 +8,13 @@
   outputs =
     { self, nixpkgs, systems, ... }:
     let
-      forAllSystems = nixpkgs.lib.genAttrs (import systems);
+      # forAllSystems = nixpkgs.lib.genAttrs (import systems);
+      forAllSystems = nixpkgs.lib.genAttrs [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
     in
     {
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style);

@@ -1,9 +1,13 @@
 _: {
 
-  imports = [
-    # add any optional imports here
-  ];
-
   networking.hostName = "test";
-  custom.boot.systemd = true;
+  custom = {
+    setup = {
+      rootDisk = "/dev/vda";
+      isSwap = true;
+      swapSize = "8G";
+      isDisko = true;
+    };
+    boot.systemd = true;
+  };
 }
