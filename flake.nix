@@ -6,12 +6,30 @@
   };
 
   outputs =
-    { nixpkgs, systems, ... }:
+    { self, nixpkgs, systems, ... }:
     let
       forAllSystems = nixpkgs.lib.genAttrs (import systems);
     in
     {
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style);
+
+      apps = forAllSystems
+        (system:
+          let
+            pkgs = nixpkgs.legacyPackages.${system};
+            bootstrap = pkgs.writeShellApplication
+              {
+                name = "bootstrap";
+                runtimeInputs = [ pkgs.git ];
+                text = builtins.readFile ./scripts/bootstrap.sh;
+              };
+          in
+          {
+            default = {
+              type = "app";
+              program = "${bootstrap}/bin/bootstrap";
+            };
+          });
 
       templates.default = {
         description = "Starter flake using disko, home-manager, and sops-nix";
